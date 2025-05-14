@@ -25,6 +25,9 @@ class ThemeController extends GetxController {
       Color get cardColor => isDarkMode.value
     ? const Color.fromARGB(255, 41, 41, 41) 
     : const Color.fromARGB(255, 245, 245, 245);
+Color get storyContainer => isDarkMode.value
+    ? const Color.fromARGB(255, 36, 36, 36) // darker for dark mode
+    : const Color.fromARGB(255, 255, 255, 255); // white for light mode
 
 
   @override

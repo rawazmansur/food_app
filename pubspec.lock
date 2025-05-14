@@ -193,6 +193,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  firebase_analytics:
+    dependency: "direct main"
+    description:
+      name: firebase_analytics
+      sha256: "2416b9d864412ab7b571dafded801bbcc7e29b5824623c055002d4d0819bea2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.4.5"
+  firebase_analytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_analytics_platform_interface
+      sha256: "3ccf5c876a8bea186016de4bcf53fc1bc6fa01236d740fb501d7ef9be356c58e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.5"
+  firebase_analytics_web:
+    dependency: transitive
+    description:
+      name: firebase_analytics_web
+      sha256: "5e4e3f001b67c2034b76cb2a42a0eed330fb3a8fb41ad13eceb04e8d9a74f662"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.10+11"
   firebase_core:
     dependency: "direct main"
     description:
@@ -441,7 +465,7 @@ packages:
     source: hosted
     version: "0.15.6"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "2c11f3f94c687ee9bad77c171151672986360b2b001d109814ee7140b2cf261b"
@@ -593,7 +617,7 @@ packages:
     source: hosted
     version: "3.2.0"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: "75cca69d1490965be98c73ceaea117e8a04dd21217b37b292c9ddbec0d955bc5"
@@ -845,6 +869,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.1"
+  story:
+    dependency: "direct main"
+    description:
+      name: story
+      sha256: "0cff3c02d5ad1d9c1cf79481b8fe4a4f2f859e56b351644e96b8b209e6a110a5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   stream_channel:
     dependency: transitive
     description:
@@ -1045,6 +1077,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.5"
+  visibility_detector:
+    dependency: "direct main"
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:
@@ -1097,10 +1137,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_platform_interface
-      sha256: "18b1640839cf6546784a524c72aded5b6e86b23e7167dc2311cc96f7658b64bd"
+      sha256: e54a2a435144af4e008bea140c06913eeb3f25db421c2ceaa932f314a45d79b9
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.0"
+    version: "2.12.0"
   webview_flutter_wkwebview:
     dependency: transitive
     description:

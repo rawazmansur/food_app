@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/DataController.dart';
 import 'package:food/controller/FontSizeController.dart';
+import 'package:food/controller/StoryController.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:food/controller/tasbih_controller.dart';
 import 'package:food/firebase_options.dart';
@@ -26,6 +27,7 @@ void main() async {
   Get.put(FoodDataController());
   Get.put(FontSizeController());
   Get.put(TasbihController());
+  Get.put(StoryRawazController());
   runApp(const MyApp());
 }
 

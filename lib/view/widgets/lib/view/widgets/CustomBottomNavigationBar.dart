@@ -70,7 +70,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 Get.off(() => const Tasbihat(), transition: Transition.noTransition);
                 break;
               case 2:
-                Get.off(() => const Notfiication(), transition: Transition.noTransition);
+                Get.off(() => Notfiication(), transition: Transition.noTransition);
                 break;
               case 3:
                 Get.off(() => const Settings(), transition: Transition.noTransition);
