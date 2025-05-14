@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,16 +14,26 @@ import 'package:food/view/SplashScreen.dart';
 import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  // Show notification here using local_notifications if needed
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // local notification
   await NotificationService.init();
   tz.initializeTimeZones();
   await NotificationService.scheduleDailyNotificationsAt9AMAnd9PM();
   // Initialize Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Handle background messages
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   // Controller
+
   Get.put(ThemeController());
   Get.put(FoodDataController());
   Get.put(FontSizeController());

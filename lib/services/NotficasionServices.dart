@@ -2,16 +2,31 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
     // Initialize timezone database
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
     print('Local timezone set to: ${tz.local.name}'); // Should
+
+    await messaging.requestPermission(alert: true, badge: true, sound: true);
+    await messaging.subscribeToTopic('all');
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        final title = message.notification?.title ?? 'Title';
+        final body = message.notification?.body ?? 'Message body';
+        _showFCMNotification(title, body);
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('User tapped on FCM notification');
+    });
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings iOSInitializationSettings =
@@ -66,6 +81,28 @@ class NotificationService {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
+  static Future<void> _showFCMNotification(String title, String body) async {
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+          'fcm_channel',
+          'FCM Notifications',
+          importance: Importance.max,
+          priority: Priority.high,
+        );
+
+    const NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(),
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title,
+      body,
+      platformDetails,
+    );
+  }
+
   static Future<void> onDidReceiveNotification(
     NotificationResponse notificationResponse,
   ) async {
@@ -113,6 +150,7 @@ class NotificationService {
         ),
         iOS: DarwinNotificationDetails(),
       ),
+
       matchDateTimeComponents: DateTimeComponents.time,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
