@@ -2,31 +2,40 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  final WebSocketChannel channel =
+      WebSocketChannel.connect(Uri.parse('wss://ntfy.sh/stories'));
+
+  void listenForNotifications() {
+    channel.stream.listen((message) {
+      print('New message: $message');
+      // Show a local notification or navigate the user to the story page
+      _showNotification(message);
+    });
+  }
+
+  void _showNotification(String message) {
+    FlutterLocalNotificationsPlugin().show(
+      0,
+      'New Story Added!',
+      message,
+      NotificationDetails(
+        android: AndroidNotificationDetails('story_channel', 'Stories Channel'),
+      ),
+    );
+  }
+
   static Future<void> init() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
     // Initialize timezone database
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
     print('Local timezone set to: ${tz.local.name}'); // Should
 
-    await messaging.requestPermission(alert: true, badge: true, sound: true);
-    await messaging.subscribeToTopic('all');
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        final title = message.notification?.title ?? 'Title';
-        final body = message.notification?.body ?? 'Message body';
-        _showFCMNotification(title, body);
-      }
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('User tapped on FCM notification');
-    });
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings iOSInitializationSettings =
@@ -37,6 +46,7 @@ class NotificationService {
           android: androidInitializationSettings,
           iOS: iOSInitializationSettings,
         );
+
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
@@ -79,28 +89,6 @@ class NotificationService {
           IOSFlutterLocalNotificationsPlugin
         >()
         ?.requestPermissions(alert: true, badge: true, sound: true);
-  }
-
-  static Future<void> _showFCMNotification(String title, String body) async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails(
-          'fcm_channel',
-          'FCM Notifications',
-          importance: Importance.max,
-          priority: Priority.high,
-        );
-
-    const NotificationDetails platformDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: DarwinNotificationDetails(),
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title,
-      body,
-      platformDetails,
-    );
   }
 
   static Future<void> onDidReceiveNotification(

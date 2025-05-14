@@ -55,6 +55,7 @@ dependencies:
   story: ^1.1.0
   firebase_analytics: ^11.4.5
   visibility_detector: ^0.4.0+2
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_test:
