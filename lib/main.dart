@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,12 +11,8 @@ import 'package:food/firebase_options.dart';
 import 'package:food/services/NotficasionServices.dart';
 import 'package:food/view/SplashScreen.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  // Show notification here using local_notifications if needed
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +22,29 @@ void main() async {
   await NotificationService.init();
   tz.initializeTimeZones();
   await NotificationService.scheduleDailyNotificationsAt9AMAnd9PM();
-  // Initialize Firebase
 
-  // Handle background messages
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  
+  OneSignal.initialize('4cb901f9-5de8-4c37-b88e-2c2ba4f55c57');
+
+  // Request notification permission
+  //OneSignal.Notifications.requestPermission(true);
+  OneSignal.Notifications.requestPermission(true);
+  
+
+
+  // Optional: Handle foreground notification display
+  OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+    print(
+      "Notification received in foreground: ${event.notification.jsonRepresentation()}",
+    );
+    // Notifications will be displayed automatically
+  });
+
+  // Optional: Handle when the user taps a notification
+  OneSignal.Notifications.addClickListener((event) {
+    print("User clicked: ${event.notification.jsonRepresentation()}");
+  });
 
   // Controller
 

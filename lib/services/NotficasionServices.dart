@@ -2,39 +2,19 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  final WebSocketChannel channel =
-      WebSocketChannel.connect(Uri.parse('wss://ntfy.sh/stories'));
 
-  void listenForNotifications() {
-    channel.stream.listen((message) {
-      print('New message: $message');
-      // Show a local notification or navigate the user to the story page
-      _showNotification(message);
-    });
-  }
-
-  void _showNotification(String message) {
-    FlutterLocalNotificationsPlugin().show(
-      0,
-      'New Story Added!',
-      message,
-      NotificationDetails(
-        android: AndroidNotificationDetails('story_channel', 'Stories Channel'),
-      ),
-    );
-  }
+  
 
   static Future<void> init() async {
     // Initialize timezone database
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Baghdad'));
-    print('Local timezone set to: ${tz.local.name}'); // Should
 
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -45,6 +25,18 @@ class NotificationService {
         InitializationSettings(
           android: androidInitializationSettings,
           iOS: iOSInitializationSettings,
+        );
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.createNotificationChannel(
+          AndroidNotificationChannel(
+            'story_channel',
+            'Stories Channel',
+            description: 'Channel for story notifications',
+            importance: Importance.high,
+          ),
         );
 
     await flutterLocalNotificationsPlugin
@@ -101,7 +93,6 @@ class NotificationService {
   /// Schedule daily notifications at 9 AM and 9 PM
   static Future<void> scheduleDailyNotificationsAt9AMAnd9PM() async {
     final now = tz.TZDateTime.now(tz.local);
-    print("Scheduling 9 AM notification");
     await flutterLocalNotificationsPlugin.zonedSchedule(
       1,
       'سبحان الله',
@@ -121,7 +112,6 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
 
-    print("Scheduling 9 PM notification");
     await flutterLocalNotificationsPlugin.zonedSchedule(
       2,
       'اللە أكبر',
@@ -162,9 +152,6 @@ class NotificationService {
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
-    print('Now (local): $now');
-    print('Scheduled (local): $scheduledDate');
-    print('Scheduled (UTC): ${scheduledDate.toUtc()}');
     return scheduledDate;
   }
 }
