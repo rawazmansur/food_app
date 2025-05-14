@@ -80,22 +80,31 @@ class StoryRawazController extends GetxController {
   }
 
   void viewStory(String storyId) async {
-    if (!viewedStories.contains(storyId)) {
-      viewedStories.add(storyId); // Add the story to the viewed set
+  if (!viewedStories.contains(storyId)) {
+    viewedStories.add(storyId); // Track locally
 
-      // Update the story view count (this can be updated on the server too)
-      final storyIndex = stories.indexWhere((story) => story.id == storyId);
-      if (storyIndex != -1) {
-        stories[storyIndex].views++;
-        // If you want to persist the views in Firebase or locally, do it here
-        await FirebaseAnalytics.instance.logEvent(
-          name: 'story_view',
-          parameters: {
-            'story_id': storyId,
-            'timestamp': DateTime.now().toIso8601String(),
-          },
-        );
-      }
+    // Update local object
+    final storyIndex = stories.indexWhere((story) => story.id == storyId);
+    if (storyIndex != -1) {
+      stories[storyIndex].views++;
+
+      // 🔥 Save new view count to Firestore
+      final doc = _firestore.collection('stories').doc(storyId);
+      await doc.update({'views': FieldValue.increment(1)});
+
+      // Optional: mark as viewed in local storage
+      markViewedStory(storyId);
+
+      // Log analytics
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'story_view',
+        parameters: {
+          'story_id': storyId,
+          'timestamp': DateTime.now().toIso8601String(),
+        },
+      );
     }
   }
+}
+
 }

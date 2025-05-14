@@ -19,11 +19,12 @@ class _NotfiicationState extends State<Notfiication> {
   final ThemeController _themeController = Get.find();
   final ScrollController _scrollController = ScrollController();
 
+  Map<String, bool> _expandedStories = {};
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    
+
     // Track screen view when the screen is loaded
     FirebaseAnalytics.instance.setCurrentScreen(
       screenName: 'Notification', // Specify your screen name
@@ -48,13 +49,12 @@ class _NotfiicationState extends State<Notfiication> {
 
   String timeAgo(DateTime dateTime) {
     String convertToEastern(int number) {
-      final easternNumbers = [
-        '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩',
-      ];
+      final easternNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
       return number
           .toString()
           .split('')
-          .map((e) => easternNumbers[int.parse(e)]).join('');
+          .map((e) => easternNumbers[int.parse(e)])
+          .join('');
     }
 
     final Duration diff = DateTime.now().difference(dateTime);
@@ -152,78 +152,174 @@ class _NotfiicationState extends State<Notfiication> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              story.imageUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 200,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                } else {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  (loadingProgress
-                                                          .expectedTotalBytes ??
-                                                      1)
-                                              : null,
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                  story.imageUrl,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: 300.sp,
+
+                                  loadingBuilder: (
+                                    context,
+                                    child,
+                                    loadingProgress,
+                                  ) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return SizedBox(
+                                        height: 200.sp,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            value:
+                                                loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        (loadingProgress
+                                                                .expectedTotalBytes ??
+                                                            1)
+                                                    : null,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Positioned(
+                                  top: 8,
+                                  left: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
                                     ),
-                                  );
-                                }
-                              },
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.6),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.visibility,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '${story.views}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                // Bottom-right: Likes
+                                Positioned(
+                                  bottom: 8,
+                                  right: 8,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      await controller.toggleLikeStory(
+                                        story.id,
+                                      );
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      height: 30.sp,
+
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.6),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.favorite,
+                                            color:
+                                                isLiked
+                                                    ? Colors.red
+                                                    : Colors.white,
+                                            size: 16,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            '${story.likes}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+                      if (story.text.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.favorite,
-                                  color: isLiked ? Colors.red : Colors.grey,
-                                ),
-                                onPressed: () async {
-                                  await controller.toggleLikeStory(story.id);
-                                  setState(() {});
-                                },
-                              ),
                               Text(
-                                '${story.likes}',
+                                story.text,
+                                maxLines:
+                                    _expandedStories[story.id] == true
+                                        ? null
+                                        : 2, // Toggle between 2 lines and unlimited lines
+                                overflow: TextOverflow.fade,
                                 style: TextStyle(
-                                  fontSize: 20.sp,
+                                  fontSize: 15.sp,
+                                  fontFamily: 'ZainPeet',
                                   color: _themeController.textAppBar,
-                                  fontWeight: FontWeight.bold,
                                 ),
+                                textAlign: TextAlign.right,
                               ),
+                              if (story.text.length >
+                                  100) // Show the "see more" button only for long texts
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _expandedStories[story.id] =
+                                          !(_expandedStories[story.id] ??
+                                              false); // Toggle the expansion
+                                    });
+                                  },
+                                  child: Text(
+                                    _expandedStories[story.id] == true
+                                        ? 'کەمتر ببینە' // Show "See Less" when expanded
+                                        : 'زیاتر ببینە', // Show "See More" when collapsed
+                                    style: TextStyle(
+                                      fontFamily: 'ZainPeet',
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          _themeController.isDarkMode.value
+                                              ? Colors.amber
+                                              : Colors.red,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.visibility),
-                                onPressed: ()  {
-                                   controller.viewStory(story.id);
-                                },
-                              ),
-                              Text(
-                                '${story.views}',
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  color: _themeController.textAppBar,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
                     ],
                   ),
                 ),
