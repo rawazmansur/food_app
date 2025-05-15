@@ -60,6 +60,10 @@ dependencies:
   flutter_web_browser: ^0.17.3
   just_audio: ^0.9.46
   cached_network_image: ^3.4.1
+  lottie: ^3.3.1
+  percent_indicator: ^4.2.5
+  permission_handler: ^12.0.0+1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +93,7 @@ flutter:
     - assets/fonts/
     - assets/svg/
     - assets/imgs/
+    - assets/Lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

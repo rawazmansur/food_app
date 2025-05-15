@@ -56,6 +56,7 @@ void main() async {
   Get.put(TasbihController());
   Get.put(StoryRawazController());
   Get.put(AudioRawazController());
+  Get.put(AudioRawazController());
   Get.put(NotificationPreferenceController());
 
   runApp(const MyApp());
