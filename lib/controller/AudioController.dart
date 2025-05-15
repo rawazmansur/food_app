@@ -23,8 +23,8 @@ class AudioRawazController extends GetxController {
       print('Fetching audios from ImageKit... $imageKitUrl$folderName/');
 
       // API endpoint for fetching files
-   final apiEndpoint = 'https://api.imagekit.io/v1/files?folder=Audios&sort=ASC_CREATED';
-
+      final apiEndpoint =
+          'https://api.imagekit.io/v1/files?folder=Audios&sort=ASC_CREATED';
 
       // Your private API key (replace with your actual private API key)
       String privateKey = 'private_Hmre0i5Mw/gCy6Tc22MKrziQj5c=';
@@ -62,7 +62,7 @@ class AudioRawazController extends GetxController {
               );
             }
           }
-       
+
           // Update the UI with the fetched audios
           update();
         } else {
@@ -118,32 +118,32 @@ class AudioRawazController extends GetxController {
     return cleaned.trim();
   }
 
-int extractSortNumber(String fileName) {
-  // Remove the file extension
-  String nameWithoutExtension = fileName.replaceAll('.mp3', '');
+  int extractSortNumber(String fileName) {
+    // Remove the file extension
+    String nameWithoutExtension = fileName.replaceAll('.mp3', '');
 
-  // Split the name by underscores
-  List<String> parts = nameWithoutExtension.split('_');
+    // Split the name by underscores
+    List<String> parts = nameWithoutExtension.split('_');
 
-  // Ensure there are at least two parts to extract the second number
-  if (parts.length >= 2) {
-    // Convert Arabic numerals to Western numerals if necessary
-    String arabicNumber = parts[1];
-    String westernNumber = arabicNumber
-        .replaceAll('٠', '0')
-        .replaceAll('١', '1')
-        .replaceAll('٢', '2')
-        .replaceAll('٣', '3')
-        .replaceAll('٤', '4')
-        .replaceAll('٥', '5')
-        .replaceAll('٦', '6')
-        .replaceAll('٧', '7')
-        .replaceAll('٨', '8')
-        .replaceAll('٩', '9');
+    // Ensure there are at least two parts to extract the second number
+    if (parts.length >= 2) {
+      // Convert Arabic numerals to Western numerals if necessary
+      String arabicNumber = parts[1];
+      String westernNumber = arabicNumber
+          .replaceAll('٠', '0')
+          .replaceAll('١', '1')
+          .replaceAll('٢', '2')
+          .replaceAll('٣', '3')
+          .replaceAll('٤', '4')
+          .replaceAll('٥', '5')
+          .replaceAll('٦', '6')
+          .replaceAll('٧', '7')
+          .replaceAll('٨', '8')
+          .replaceAll('٩', '9');
 
-    return int.tryParse(westernNumber) ?? 0;
+      return int.tryParse(westernNumber) ?? 0;
+    }
+
+    return 0;
   }
-
-  return 0;
-}
 }

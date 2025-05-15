@@ -13,6 +13,24 @@ class Youtubepage extends StatefulWidget {
 
 class _YoutubepageState extends State<Youtubepage> {
   ThemeController themeController = Get.find();
+  String cleanTitle(String title) {
+    // Remove leading parentheses and spaces, then the "١٦-" pattern with optional spaces,
+    // then remove the parentheses again if they are empty or just spaces after removing prefix.
+
+    // 1. Remove '(' from start if exists
+    String t = title.trim();
+
+    if (t.startsWith('(')) {
+      t = t.substring(1).trimLeft();
+    }
+
+    // 2. Remove '١٦-' prefix with optional spaces after it
+    t = t.replaceFirst(RegExp(r'^١٦-\s*'), '');
+
+    // 3. Remove trailing ')' if exists
+
+    return t;
+  }
 
   // Sample list of YouTube videos
   final List<Map<String, String>> youtubeVideos = [
@@ -21,7 +39,7 @@ class _YoutubepageState extends State<Youtubepage> {
       'url': 'https://youtu.be/ROp3WMeMljM?si=F2322wHkZ2hAkFfJ',
     },
     {
-      'title': '(١٦- ٢- بەرنامەى خۆراك خواردن بە بەرنامە)',
+      'title': '(١٦- ٢- (بەرنامەى خۆراك خواردن بە بەرنامە',
       'url': 'https://youtu.be/C3qyE4MNiJ8?si=2hx3GdRMYHEOqBBE',
     },
     {
@@ -125,7 +143,8 @@ class _YoutubepageState extends State<Youtubepage> {
       'url': 'https://youtu.be/HKP8SzPrfNU?si=7IOBTjNhd_JEEA1a',
     },
     {
-      'title': '١٦- ٢٩- بەرنامەى خۆراك (هێڵە گشتييەكانى بەرنامەى خۆراكى پێغەمبەر) کۆتایی',
+      'title':
+          '١٦- ٢٩- بەرنامەى خۆراك (هێڵە گشتييەكانى بەرنامەى خۆراكى پێغەمبەر) کۆتایی',
       'url': 'https://youtu.be/7ToEgWOHoq0?si=jFyMsGokWwmMDO2K',
     },
 
@@ -180,44 +199,62 @@ class _YoutubepageState extends State<Youtubepage> {
           child: ListView.builder(
             itemCount: youtubeVideos.length,
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Future.microtask(
-                    () => launchURL(youtubeVideos[index]['url']!),
-                  );
-                },
+              String url = youtubeVideos[index]['url']!;
+              String title = cleanTitle(youtubeVideos[index]['title']!);
 
-                child: Card(
-                  color: themeController.scaffold,
-                  elevation: 4,
-                  margin: EdgeInsets.only(bottom: 10.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const String backgroundImage =
+                  'https://www.shutterstock.com/image-photo/ramadan-iftar-eid-muslim-family-260nw-2134403149.jpg';
+
+              return GestureDetector(
+                onTap: () => launchURL(url),
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 16.h),
+                  height: 180.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                      image: NetworkImage(backgroundImage
+                      ),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.5),
+                        BlendMode.darken,
+                      ),
+                      
+                    ),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.all(12.w),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.video_library,
-                          color: themeController.textAppBar,
-                          size: 30.sp,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.black.withOpacity(0.4),
                         ),
-                        SizedBox(width: 10.w),
-                        Expanded(
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.w),
                           child: Text(
-                            youtubeVideos[index]['title']!,
+                            title,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 16.sp,
-                              color: themeController.textAppBar,
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
                               fontFamily: 'ZainPeet',
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               );
