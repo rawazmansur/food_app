@@ -1,29 +1,27 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:food/controller/ThemeController.dart';
+
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:http/http.dart' as http;
 import 'package:food/Model/AudioModel.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:permission_handler/permission_handler.dart'; // Ensure this model exists
 
 class AudioRawazController extends GetxController {
   final player = AudioPlayer();
 
   var currentPosition = Duration.zero.obs;
   var currentDuration = Duration.zero.obs;
+  var isPaused = false.obs; // true if audio is paused (not playing)
 
   var isPlaying = false.obs;
   var currentAudioTitle = ''.obs;
+  var topPlayButtonVisible = true.obs;
+  var bottomPlayButtonVisible = false.obs;
 
   var audioList = <AudioModel>[].obs;
-
+  RxDouble playbackSpeed = 1.0.obs;
   final String imageKitUrl = 'https://ik.imagekit.io/n4ye4m0mih/';
   final String folderName = 'Audios';
-
+  var isDoubleSpeed = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -58,9 +56,7 @@ class AudioRawazController extends GetxController {
 
       final response = await http.get(
         Uri.parse(apiEndpoint),
-        headers: {
-          'Authorization': 'Basic $encodedKey',
-        },
+        headers: {'Authorization': 'Basic $encodedKey'},
       );
 
       if (response.statusCode == 200) {
@@ -71,10 +67,7 @@ class AudioRawazController extends GetxController {
           for (var file in data) {
             if (file['type'] == 'file' && file['url'] != null) {
               audioList.add(
-                AudioModel(
-                  title: cleanTitle(file['name']),
-                  url: file['url'],
-                ),
+                AudioModel(title: cleanTitle(file['name']), url: file['url']),
               );
             }
           }
@@ -114,7 +107,10 @@ class AudioRawazController extends GetxController {
 
   String cleanTitle(String rawName) {
     String nameWithoutExtension = rawName.replaceAll('.mp3', '');
-    nameWithoutExtension = nameWithoutExtension.replaceAll(RegExp(r'MP3.*'), '');
+    nameWithoutExtension = nameWithoutExtension.replaceAll(
+      RegExp(r'MP3.*'),
+      '',
+    );
     String cleaned = nameWithoutExtension.replaceAll('_', ' ');
 
     if (cleaned.startsWith('١٦ ')) {
@@ -128,18 +124,33 @@ class AudioRawazController extends GetxController {
   void onClose() {
     player.dispose();
     super.onClose();
-  }void playNext() {
-  int currentIndex = audioList.indexWhere((a) => a.title == currentAudioTitle.value);
-  if (currentIndex < audioList.length - 1) {
-    playAudio(audioList[currentIndex + 1]);
   }
-}
 
-void playPrevious() {
-  int currentIndex = audioList.indexWhere((a) => a.title == currentAudioTitle.value);
-  if (currentIndex > 0) {
-    playAudio(audioList[currentIndex - 1]);
+  void playNext() {
+    int currentIndex = audioList.indexWhere(
+      (a) => a.title == currentAudioTitle.value,
+    );
+    if (currentIndex < audioList.length - 1) {
+      playAudio(audioList[currentIndex + 1]);
+    }
+  }
+
+  void playPrevious() {
+    int currentIndex = audioList.indexWhere(
+      (a) => a.title == currentAudioTitle.value,
+    );
+    if (currentIndex > 0) {
+      playAudio(audioList[currentIndex - 1]);
+    }
+  }
+
+  void setPlaybackSpeed(double speed) {
+    playbackSpeed.value = speed;
+    player.setSpeed(speed);
+  }
+
+  void toggleSpeed() {
+    isDoubleSpeed.value = !isDoubleSpeed.value;
+    player.setSpeed(isDoubleSpeed.value ? 2.0 : 1.0);
   }
 }
-}
-  

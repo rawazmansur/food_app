@@ -2,12 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:food/controller/AudioController.dart';
 import 'package:food/controller/AudioDownloaderController.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart'; // assuming you're using just_audio for audio playback
 
 class AudioPlayerPage extends StatefulWidget {
   @override
@@ -150,110 +148,166 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
 
                               SizedBox(height: 16.h),
 
-                        
+                              SizedBox(height: 8.h),
 
-                              // ⏱️ Duration & Slider
-                              if (audioController.currentAudioTitle.value ==
-                                  audio.title) ...[
-                                Slider(
-                                  min: 0,
-                                  max: duration.inSeconds.toDouble(),
-                                  value:
-                                      position.inSeconds
-                                          .clamp(0, duration.inSeconds)
-                                          .toDouble(),
-                                  onChanged: (value) {
-                                    audioController.seek(
-                                      Duration(seconds: value.toInt()),
-                                    );
-                                  },
-                                  activeColor: themeController.iconBottonNav,
-                                  inactiveColor: Colors.grey,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                              // 🔽 Play/Pause Button + Conditional Controls
+                              Obx(() {
+                                final isCurrent =
+                                    audioController.currentAudioTitle.value ==
+                                    audio.title;
+                                final isPlaying =
+                                    audioController.isPlaying.value &&
+                                    isCurrent;
+
+                                if (isPlaying) {
+                                  // 🟢 Show full controls for currently playing audio
+                                  return Column(
                                     children: [
-                                      Text(
-                                        formatDuration(position),
-                                        style: TextStyle(
-                                          color: themeController.textAppBar,
+                                      Slider(
+                                        min: 0,
+                                        max: duration.inSeconds.toDouble(),
+                                        value:
+                                            position.inSeconds
+                                                .clamp(0, duration.inSeconds)
+                                                .toDouble(),
+                                        onChanged: (value) {
+                                          audioController.seek(
+                                            Duration(seconds: value.toInt()),
+                                          );
+                                        },
+                                        activeColor:
+                                            themeController.iconBottonNav,
+                                        inactiveColor: Colors.grey,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8.w,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              formatDuration(position),
+                                              style: TextStyle(
+                                                color:
+                                                    themeController.textAppBar,
+                                              ),
+                                            ),
+                                            Text(
+                                              formatDuration(duration),
+                                              style: TextStyle(
+                                                color:
+                                                    themeController.textAppBar,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Text(
-                                        formatDuration(duration),
-                                        style: TextStyle(
-                                          color: themeController.textAppBar,
-                                        ),
+                                      SizedBox(height: 8.h),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.skip_previous_rounded,
+                                            ),
+                                            iconSize: 40.sp,
+                                            color:
+                                                themeController.iconBottonNav,
+                                            onPressed:
+                                                () =>
+                                                    audioController
+                                                        .playPrevious(),
+                                          ),
+                                          SizedBox(width: 20.w),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.pause_circle_filled,
+                                            ),
+                                            iconSize: 40.sp,
+                                            color:
+                                                themeController.iconBottonNav,
+                                            onPressed: () {
+                                              audioController.player.pause();
+                                              audioController.isPlaying.value =
+                                                  false;
+                                            },
+                                          ),
+                                          SizedBox(width: 20.w),
+                                          IconButton(
+                                            icon: Icon(Icons.skip_next_rounded),
+                                            iconSize: 40.sp,
+                                            color:
+                                                themeController.iconBottonNav,
+                                            onPressed:
+                                                () =>
+                                                    audioController.playNext(),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                ),
-                                SizedBox(height: 8.h),
+                                  );
+                                } else {
+                                  // 🔵 Show Play button always when not playing
+                                  return IconButton(
+                                    icon: Icon(Icons.play_circle_filled),
+                                    iconSize: 50.sp,
+                                    color: themeController.iconBottonNav,
+                                    onPressed: () {
+                                      audioController.playAudio(audio);
+                                    },
+                                  );
+                                }
+                              }),
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // ⏮️ Previous
-                                    IconButton(
-                                      icon: Icon(Icons.skip_previous_rounded),
-                                      iconSize: 40.sp,
-                                      color: themeController.iconBottonNav,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // 🔁 x1/x2 Speed Button
+                                  Obx(() {
+                                    final isCurrent =
+                                        audioController
+                                            .currentAudioTitle
+                                            .value ==
+                                        audio.title;
+                                    if (!isCurrent)
+                                      return SizedBox(); // Only show for current playing audio
+
+                                    return TextButton(
+
                                       onPressed: () {
-                                        audioController.playPrevious();
+                                        audioController.toggleSpeed();
                                       },
-                                    ),
-
-                                    SizedBox(width: 20.w),
-
-                                    // ⏯️ Play / Pause
-                                    IconButton(
-                                      icon: Icon(
-                                        isPlaying
-                                            ? Icons.pause_circle_filled
-                                            : Icons.play_circle_filled,
+                                      child: Text(
+                                        audioController.isDoubleSpeed.value
+                                            ? '2x '
+                                            : '1x',
+                                        style: TextStyle(
+                                          color: themeController.textAppBar,
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      iconSize: 64.sp,
-                                      color: themeController.iconBottonNav,
-                                      onPressed: () {
-                                        audioController.playAudio(audio);
-                                      },
-                                    ),
-
-                                    SizedBox(width: 20.w),
-
-                                    // ⏭️ Next
-                                    IconButton(
-                                      icon: Icon(Icons.skip_next_rounded),
-                                      iconSize: 40.sp,
-                                      color: themeController.iconBottonNav,
-                                      onPressed: () {
-                                        audioController.playNext();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-
-                              // ⬇️ Download Button
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.download,
-                                    color: themeController.textAppBar,
-                                  ),
-                                  onPressed: () {
-                                    audioDownloaderController.downloadAudio(
-                                      audio.url,
-                                      '${audio.title}.mp3',
                                     );
-                                  },
-                                ),
+                                  }),
+                                  // ⬇️ Download
+                                  IconButton(
+                                    iconSize: 25.sp,
+                                    icon: Icon(
+                                      Icons.download,
+                                      color: themeController.textAppBar,
+                                    ),
+                                    onPressed: () {
+                                      audioDownloaderController.downloadAudio(
+                                        audio.url,
+                                        '${audio.title}.mp3',
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
                           ),
