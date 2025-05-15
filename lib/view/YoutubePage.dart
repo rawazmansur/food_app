@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
@@ -213,14 +214,12 @@ class _YoutubepageState extends State<Youtubepage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
-                      image: NetworkImage(backgroundImage
-                      ),
+                      image: CachedNetworkImageProvider(backgroundImage),
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.5),
                         BlendMode.darken,
                       ),
-                      
                     ),
                   ),
                   child: Stack(

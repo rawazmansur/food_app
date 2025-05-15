@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +6,7 @@ import 'package:food/controller/StoryController.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class Notfiication extends StatefulWidget {
@@ -154,40 +156,23 @@ class _NotfiicationState extends State<Notfiication> {
                             borderRadius: BorderRadius.circular(10),
                             child: Stack(
                               children: [
-                                Image.network(
-                                  story.imageUrl,
+                                CachedNetworkImage(
+                                  imageUrl: story.imageUrl,
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   height: 300.sp,
-
-                                  loadingBuilder: (
-                                    context,
-                                    child,
-                                    loadingProgress,
-                                  ) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return SizedBox(
+                                  placeholder:
+                                      (context, url) => SizedBox(
                                         height: 200.sp,
                                         child: Center(
-                                          child: CircularProgressIndicator(
-                                            value:
-                                                loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        (loadingProgress
-                                                                .expectedTotalBytes ??
-                                                            1)
-                                                    : null,
-                                          ),
+                                          child: CircularProgressIndicator(),
                                         ),
-                                      );
-                                    }
-                                  },
+                                      ),
+                                  errorWidget:
+                                      (context, url, error) =>
+                                          Icon(Icons.error),
                                 ),
+              
                                 Positioned(
                                   top: 8,
                                   left: 8,
@@ -219,7 +204,7 @@ class _NotfiicationState extends State<Notfiication> {
                                     ),
                                   ),
                                 ),
-
+              
                                 // Bottom-right: Likes
                                 Positioned(
                                   bottom: 8,
@@ -233,14 +218,16 @@ class _NotfiicationState extends State<Notfiication> {
                                     },
                                     child: Container(
                                       height: 30.sp,
-
+              
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
                                         vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
                                         color: Colors.black.withOpacity(0.6),
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(
+                                          8,
+                                        ),
                                       ),
                                       child: Row(
                                         mainAxisAlignment:

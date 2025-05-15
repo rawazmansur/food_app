@@ -30,21 +30,13 @@ class AudioDownloaderController extends GetxController {
     try {
       await requestManageExternalStoragePermission();
 
-      final dir = await getExternalStorageDirectory();
-      if (dir == null) {
-        Get.snackbar(
-          'کێشەیەک هەیە',
-          'تکایە دواتر هەوڵبدەرەوە',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red.shade700,
-          colorText: Colors.white,
-          borderRadius: 8,
-          margin: EdgeInsets.all(10),
-        );
-        return;
-      }
+   final downloadsDir = Directory('/storage/emulated/0/Download');
 
-      final file = File('${dir.path}/$filename');
+    if (!await downloadsDir.exists()) {
+      await downloadsDir.create(recursive: true);
+    }
+
+    final file = File('${downloadsDir.path}/$filename');
 
       final request = http.Request('GET', Uri.parse(url));
       final client = http.Client();
@@ -95,7 +87,6 @@ class AudioDownloaderController extends GetxController {
                       ? Colors.lightGreenAccent.shade400
                       : Colors.greenAccent,
               center: Text(
-
                 '${(downloadProgress.value * 100).toStringAsFixed(0)}%',
                 style: TextStyle(
                   color: Colors.black,
@@ -121,29 +112,79 @@ class AudioDownloaderController extends GetxController {
         isDownloading.value = false;
         Get.closeAllSnackbars();
 
-        Get.snackbar(
-          'سەرکەوتوو بوو',
-          'وتارەکەت بە سەرکەووتووی دابەزی',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green.shade700,
-          colorText: Colors.white,
-          borderRadius: 8,
-          margin: EdgeInsets.all(10),
-          titleText: Text(
-            'سەرکەوتوو بوو',
-            textAlign: TextAlign.right,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'zainPeet',
-              fontWeight: FontWeight.bold,
-            ),
+        Get.defaultDialog(
+          backgroundColor: Colors.white,
+          title: '',
+          titleStyle: TextStyle(fontSize: 0),
+          titlePadding: EdgeInsets.zero, // Remove space reserved for title
+          contentPadding:
+              EdgeInsets.zero, // Remove extra padding around content
+
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Green header with check icon
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 30),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                ),
+                child: Icon(Icons.check, color: Colors.white, size: 50),
+              ),
+              SizedBox(height: 20),
+
+              // Title
+              Text(
+                '! سەرکەتوو بوو',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Colors.black87,
+                  fontFamily: 'zainPeet',
+                ),
+              ),
+              SizedBox(height: 10),
+
+              // Message
+              Text(
+                'بەسەرکەووتی وتارەکە داونلۆد بوو',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                  fontFamily: 'zainPeet',
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              SizedBox(height: 30),
+
+              // Okay button
+              ElevatedButton(
+                onPressed: () => Get.back(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  'باشە',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: 'zainPeet',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
-          messageText: Text(
-            'وتارەکەت بە سەرکەووتووی دابەزی',
-            textAlign: TextAlign.right,
-            style: TextStyle(color: Colors.white, fontFamily: 'zainPeet'),
-          ),
-          duration: Duration(seconds: 3),
         );
       } else {
         Get.snackbar(

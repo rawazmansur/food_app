@@ -1,11 +1,15 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/AudioController.dart';
 import 'package:food/controller/AudioDownloaderController.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:get/get.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class AudioPlayerPage extends StatefulWidget {
   @override
@@ -65,7 +69,27 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
         body: GetBuilder<AudioRawazController>(
           builder: (controller) {
             if (controller.audioList.isEmpty) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'پێویستت بە ئینتەرنێت هەیە بۆ\n گوێگرتن لە وتارە دەنگیەکان',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        fontFamily: 'ZainPeet',
+                        color: themeController.textAppBar,
+                      ),
+                    ),
+                    SizedBox(height: 25.h),
+                    CircularProgressIndicator(
+                      color: themeController.textAppBar,
+                    ),
+                  ],
+                ),
+              );
             }
             return Padding(
               padding: EdgeInsets.all(16.w),
@@ -86,9 +110,21 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                         colors:
                             themeController.isDarkMode.value
                                 ? [
-                                  Color(0xFF0F2027),
-                                  Color(0xFF203A43),
-                                  Color(0xFF2C5364),
+                                  Color.fromARGB(
+                                    255,
+                                    36,
+                                    36,
+                                    36,
+                                  ), // your storyContainer dark shade
+                                  Color.fromARGB(
+                                    255,
+                                    41,
+                                    41,
+                                    41,
+                                  ), // your cardColor dark shade
+                                  Color(
+                                    0xFF2A2A2A,
+                                  ), // slightly darker gray for depth
                                 ]
                                 : [Color(0xFFFDFCFB), Color(0xFFE2D1C3)],
                         begin: Alignment.topLeft,
@@ -125,10 +161,14 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                     ),
                                   ],
                                   image: DecorationImage(
-                                    image: NetworkImage(
+                                    image: CachedNetworkImageProvider(
                                       'https://upload.wikimedia.org/wikipedia/commons/f/fc/Dr_Abdulwahid.jpg',
-                                    ), // You can replace with NetworkImage
+                                    ),
                                     fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.5),
+                                      BlendMode.darken,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -255,8 +295,32 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                     icon: Icon(Icons.play_circle_filled),
                                     iconSize: 50.sp,
                                     color: themeController.iconBottonNav,
-                                    onPressed: () {
-                                      audioController.playAudio(audio);
+
+                                    onPressed: () async {
+                                      final connectivityResult =
+                                          await Connectivity()
+                                              .checkConnectivity();
+                                      final hasInternet =
+                                          connectivityResult !=
+                                          ConnectivityResult.none;
+
+                                      if (!hasInternet) {
+                                        QuickAlert.show(
+                                          context: context,
+                                          type: QuickAlertType.error,
+                                          title: 'ئینتەرنێتت نیە',
+                                          text:
+                                              'ببورە، ناتوانیت دەنگەکە پەخش بکەیت چونکە تۆ ئینتەرنێت نیە.',
+                                          confirmBtnText: 'باشە',
+                                          confirmBtnColor:
+                                              themeController.iconBottonNav,
+                                          onConfirmBtnTap: () {
+                                            Get.back();
+                                          },
+                                        );
+                                      } else {
+                                        audioController.playAudio(audio);
+                                      }
                                     },
                                   );
                                 }
@@ -277,7 +341,6 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                       return SizedBox(); // Only show for current playing audio
 
                                     return TextButton(
-
                                       onPressed: () {
                                         audioController.toggleSpeed();
                                       },

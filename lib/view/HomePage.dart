@@ -40,7 +40,17 @@ class _HomepageState extends State<Homepage> {
         child: Scaffold(
           backgroundColor: _themeController.scaffold,
           appBar: AppBar(
-           
+            actions: [
+              IconButton(
+                onPressed: () {
+               
+                },
+                icon: Icon(
+                  Icons.info_outline,
+                  color: _themeController.textAppBar,
+                ),
+              ),
+            ],
             centerTitle: true,
             title: Text(
               'بەرنامەی خۆراکی پێغەمبەر ﷺ',
@@ -90,7 +100,6 @@ class _HomepageState extends State<Homepage> {
                                       const Color.fromARGB(255, 67, 67, 67),
                                     ]
                                     : const [
-                                      
                                       Color.fromARGB(255, 166, 196, 247),
                                       Color.fromARGB(255, 116, 166, 252),
                                     ],
