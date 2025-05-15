@@ -92,6 +92,7 @@ flutter:
     - assets/database/FoodApp.db
     - assets/fonts/
     - assets/svg/
+    - assets/png/
     - assets/imgs/
     - assets/Lottie/
 

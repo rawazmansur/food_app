@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/FontSizeController.dart';
 import 'package:food/controller/NotificationPreferenceController.dart';
+import 'package:food/view/SuggestionPage.dart';
+import 'package:food/view/utils/images.dart';
 import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../controller/ThemeController.dart';
 
 class Settings extends StatefulWidget {
@@ -16,6 +18,38 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  final String facebookUrl =
+      'https://www.facebook.com/Dr.Abdul.Wahid.Official.page/';
+  final String instagramUrl = 'https://www.instagram.com/dr.abdulwahid.kurdi/';
+  final String youtubeUrl = 'https://www.youtube.com/c/drabdulwahid';
+
+  Future<void> _launchFacebook() async {
+    final url = 'https://www.facebook.com/Dr.Abdul.Wahid.Official.page/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      await launch(facebookUrl);
+    }
+  }
+
+  Future<void> _launchInstagram() async {
+    final url = 'https://www.instagram.com/dr.abdulwahid.kurdi/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      await launch(instagramUrl);
+    }
+  }
+
+  Future<void> _launchYoutube() async {
+    final url = 'https://www.youtube.com/c/drabdulwahid';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      await launch(youtubeUrl);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _themeController = Get.find<ThemeController>();
@@ -161,28 +195,68 @@ class _SettingsState extends State<Settings> {
                       color: _themeController.cardColor,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Obx(() {
-                      return SwitchListTile(
-                        title: Text(
-                          'ئاگادارکردنەوەکان',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontFamily: 'ZainPeet',
-                            color: _themeController.textAppBar,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          trailing: Icon(Icons.arrow_forward_ios),
+                          leading: Image.asset(
+                            facebook,
+                            width: 30.sp,
+                            height: 30.sp,
                           ),
+                          title: Text(
+                            'پەیجی فەیسبووک',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontFamily: 'ZainPeet',
+                              color: _themeController.textAppBar,
+                            ),
+                          ),
+                          onTap: _launchFacebook,
                         ),
-                        secondary: Icon(
-                          Icons.notifications,
-                          color: _themeController.textAppBar,
+                        Divider(
+                          color: _themeController.textAppBar.withOpacity(0.2),
                         ),
-                        activeColor: _themeController.iconBottonNav,
-                        value:
-                            _notificationController.isNotificationEnabled.value,
-                        onChanged: (val) {
-                          _notificationController.toggleNotification(val);
-                        },
-                      );
-                    }),
+                        ListTile(
+                          trailing: Icon(Icons.arrow_forward_ios),
+                          leading: Image.asset(
+                            instagram,
+                            width: 30.sp,
+                            height: 30.sp,
+                          ),
+                          title: Text(
+                            'پەیجی ئینستاگرام',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontFamily: 'ZainPeet',
+                              color: _themeController.textAppBar,
+                            ),
+                          ),
+                          onTap: _launchInstagram,
+                        ),
+                        Divider(
+                          color: _themeController.textAppBar.withOpacity(0.2),
+                        ),
+                        ListTile(
+                          trailing: Icon(Icons.arrow_forward_ios),
+
+                          leading: Image.asset(
+                            youtube,
+                            width: 30.sp,
+                            height: 30.sp,
+                          ),
+                          title: Text(
+                            'چەناڵی یوتوب',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontFamily: 'ZainPeet',
+                              color: _themeController.textAppBar,
+                            ),
+                          ),
+                          onTap: _launchYoutube,
+                        ),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 16),
@@ -195,6 +269,31 @@ class _SettingsState extends State<Settings> {
                     ),
                     child: Column(
                       children: [
+                        ListTile(
+                          leading: Icon(
+                            Icons.feedback,
+                            color: _themeController.textAppBar,
+                          ),
+                          title: Text(
+                            'پێشنیار',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontFamily: 'ZainPeet',
+                              color: _themeController.textAppBar,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SuggestionPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        Divider(
+                          color: _themeController.textAppBar.withOpacity(0.2),
+                        ),
                         ListTile(
                           leading: Icon(
                             Icons.share,
