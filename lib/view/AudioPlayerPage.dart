@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:food/controller/AudioController.dart';
 import 'package:food/controller/AudioDownloaderController.dart';
 import 'package:food/controller/ThemeController.dart';
@@ -79,144 +82,183 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                   final duration = audioController.currentDuration.value;
 
                   return Container(
-                    margin: EdgeInsets.only(bottom: 20.h),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 16.h,
-                      horizontal: 16.w,
-                    ),
+                    margin: EdgeInsets.only(bottom: 24.h),
                     decoration: BoxDecoration(
-                      color:
-                          themeController.scaffold == Colors.white
-                              ? Colors.grey.shade200
-                              : Colors.grey.shade900,
-                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors:
+                            themeController.isDarkMode.value
+                                ? [
+                                  Color(0xFF0F2027),
+                                  Color(0xFF203A43),
+                                  Color(0xFF2C5364),
+                                ]
+                                : [Color(0xFFFDFCFB), Color(0xFFE2D1C3)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 6,
-                          offset: Offset(0, 3),
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 16,
+                          offset: Offset(0, 4),
                         ),
                       ],
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                        child: Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: Column(
+                            children: [
+                              // 🎵 Album Art
+                              Container(
+                                height: 180.h,
+                                width: 180.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 12,
+                                      offset: Offset(0, 6),
+                                    ),
+                                  ],
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      'https://upload.wikimedia.org/wikipedia/commons/f/fc/Dr_Abdulwahid.jpg',
+                                    ), // You can replace with NetworkImage
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+
+                              // 🎤 Title
+                              Text(
                                 audio.title,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 18.sp,
+                                  fontSize: 20.sp,
                                   fontFamily: 'ZainPeet',
+                                  fontWeight: FontWeight.w700,
                                   color: themeController.textAppBar,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                            PopupMenuButton<String>(
-                              color: themeController.scaffold,
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: themeController.textAppBar,
-                              ),
-                              onSelected: (value) {
-                                if (value == 'download') {
-                                  audioDownloaderController.downloadAudio(
-                                    audio.url,
-                                    '${audio.title}.mp3',
-                                  );
-                                }
-                              },
-                              itemBuilder:
-                                  (BuildContext context) => [
-                                    PopupMenuItem(
-                                      
-                                      
-                                      value: 'download',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.download,
-                                            color: themeController.textAppBar,
-                                          ),
-                                          SizedBox(width: 8.w),
-                                          Text(
-                                            'داگرتن' , 
-                                            style: TextStyle(
-                                                 fontSize: 16.sp,
-                                        color: themeController.textAppBar,
-                                        fontFamily: 'ZainPeet',
-                                            )
-                                          ),
-                                        ],
+
+                              SizedBox(height: 16.h),
+
+                        
+
+                              // ⏱️ Duration & Slider
+                              if (audioController.currentAudioTitle.value ==
+                                  audio.title) ...[
+                                Slider(
+                                  min: 0,
+                                  max: duration.inSeconds.toDouble(),
+                                  value:
+                                      position.inSeconds
+                                          .clamp(0, duration.inSeconds)
+                                          .toDouble(),
+                                  onChanged: (value) {
+                                    audioController.seek(
+                                      Duration(seconds: value.toInt()),
+                                    );
+                                  },
+                                  activeColor: themeController.iconBottonNav,
+                                  inactiveColor: Colors.grey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        formatDuration(position),
+                                        style: TextStyle(
+                                          color: themeController.textAppBar,
+                                        ),
                                       ),
+                                      Text(
+                                        formatDuration(duration),
+                                        style: TextStyle(
+                                          color: themeController.textAppBar,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // ⏮️ Previous
+                                    IconButton(
+                                      icon: Icon(Icons.skip_previous_rounded),
+                                      iconSize: 40.sp,
+                                      color: themeController.iconBottonNav,
+                                      onPressed: () {
+                                        audioController.playPrevious();
+                                      },
+                                    ),
+
+                                    SizedBox(width: 20.w),
+
+                                    // ⏯️ Play / Pause
+                                    IconButton(
+                                      icon: Icon(
+                                        isPlaying
+                                            ? Icons.pause_circle_filled
+                                            : Icons.play_circle_filled,
+                                      ),
+                                      iconSize: 64.sp,
+                                      color: themeController.iconBottonNav,
+                                      onPressed: () {
+                                        audioController.playAudio(audio);
+                                      },
+                                    ),
+
+                                    SizedBox(width: 20.w),
+
+                                    // ⏭️ Next
+                                    IconButton(
+                                      icon: Icon(Icons.skip_next_rounded),
+                                      iconSize: 40.sp,
+                                      color: themeController.iconBottonNav,
+                                      onPressed: () {
+                                        audioController.playNext();
+                                      },
                                     ),
                                   ],
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 12.h),
-
-                        // Play/Pause button centered
-                        IconButton(
-                          iconSize: 60.sp,
-                          icon: Icon(
-                            isPlaying
-                                ? Icons.pause_circle_filled
-                                : Icons.play_circle_fill,
-                            color: Colors.blue,
-                          ),
-                          onPressed: () {
-                            audioController.playAudio(audio);
-                          },
-                        ),
-
-                        // Show slider & duration only for currently playing audio
-                        if (audioController.currentAudioTitle.value ==
-                            audio.title) ...[
-                          Slider(
-                            min: 0,
-                            max: duration.inSeconds.toDouble(),
-                            value:
-                                position.inSeconds
-                                    .clamp(0, duration.inSeconds)
-                                    .toDouble(),
-                            onChanged: (value) {
-                              audioController.seek(
-                                Duration(seconds: value.toInt()),
-                              );
-                            },
-                            activeColor: Colors.blue,
-                            inactiveColor: Colors.grey,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  formatDuration(position),
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: themeController.textAppBar,
-                                  ),
-                                ),
-                                Text(
-                                  formatDuration(duration),
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: themeController.textAppBar,
-                                  ),
                                 ),
                               ],
-                            ),
+
+                              // ⬇️ Download Button
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.download,
+                                    color: themeController.textAppBar,
+                                  ),
+                                  onPressed: () {
+                                    audioDownloaderController.downloadAudio(
+                                      audio.url,
+                                      '${audio.title}.mp3',
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ],
+                        ),
+                      ),
                     ),
                   );
                 },

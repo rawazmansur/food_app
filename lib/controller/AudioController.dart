@@ -128,5 +128,18 @@ class AudioRawazController extends GetxController {
   void onClose() {
     player.dispose();
     super.onClose();
-  }}
+  }void playNext() {
+  int currentIndex = audioList.indexWhere((a) => a.title == currentAudioTitle.value);
+  if (currentIndex < audioList.length - 1) {
+    playAudio(audioList[currentIndex + 1]);
+  }
+}
+
+void playPrevious() {
+  int currentIndex = audioList.indexWhere((a) => a.title == currentAudioTitle.value);
+  if (currentIndex > 0) {
+    playAudio(audioList[currentIndex - 1]);
+  }
+}
+}
   

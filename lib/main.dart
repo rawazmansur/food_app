@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/AudioController.dart';
+import 'package:food/controller/AudioDownloaderController.dart';
 import 'package:food/controller/DataController.dart';
 import 'package:food/controller/FontSizeController.dart';
 import 'package:food/controller/NotificationPreferenceController.dart';
@@ -26,14 +27,12 @@ void main() async {
   await NotificationService.scheduleDailyNotificationsAt9AMAnd9PM();
 
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  
+
   OneSignal.initialize('4cb901f9-5de8-4c37-b88e-2c2ba4f55c57');
 
   // Request notification permission
   //OneSignal.Notifications.requestPermission(true);
   OneSignal.Notifications.requestPermission(true);
-  
-
 
   // Optional: Handle foreground notification display
   OneSignal.Notifications.addForegroundWillDisplayListener((event) {
@@ -48,15 +47,13 @@ void main() async {
     print("User clicked: ${event.notification.jsonRepresentation()}");
   });
 
-
-
   Get.put(ThemeController());
   Get.put(FoodDataController());
   Get.put(FontSizeController());
   Get.put(TasbihController());
   Get.put(StoryRawazController());
   Get.put(AudioRawazController());
-  Get.put(AudioRawazController());
+  Get.put(AudioDownloaderController());
   Get.put(NotificationPreferenceController());
 
   runApp(const MyApp());
