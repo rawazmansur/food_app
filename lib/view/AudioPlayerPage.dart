@@ -58,7 +58,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             if (controller.audioList.isEmpty) {
               return Center(child: CircularProgressIndicator());
             }
-            controller.audioList.sort((a, b) => a.title.compareTo(b.title));
+          //controller.audioList.sort((a, b) => a.title.compareTo(b.title));
             return Column(
               children: [
                 // List of audios to choose from

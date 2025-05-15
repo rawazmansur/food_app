@@ -23,7 +23,8 @@ class AudioRawazController extends GetxController {
       print('Fetching audios from ImageKit... $imageKitUrl$folderName/');
 
       // API endpoint for fetching files
-      final apiEndpoint = 'https://api.imagekit.io/v1/files?folder=Audios';
+   final apiEndpoint = 'https://api.imagekit.io/v1/files?folder=Audios&sort=ASC_CREATED';
+
 
       // Your private API key (replace with your actual private API key)
       String privateKey = 'private_Hmre0i5Mw/gCy6Tc22MKrziQj5c=';
