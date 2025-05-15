@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food/controller/AudioController.dart';
 import 'package:food/controller/DataController.dart';
 import 'package:food/controller/FontSizeController.dart';
+import 'package:food/controller/NotificationPreferenceController.dart';
 import 'package:food/controller/StoryController.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:food/controller/tasbih_controller.dart';
@@ -46,13 +48,16 @@ void main() async {
     print("User clicked: ${event.notification.jsonRepresentation()}");
   });
 
-  // Controller
+
 
   Get.put(ThemeController());
   Get.put(FoodDataController());
   Get.put(FontSizeController());
   Get.put(TasbihController());
   Get.put(StoryRawazController());
+  Get.put(AudioRawazController());
+  Get.put(NotificationPreferenceController());
+
   runApp(const MyApp());
 }
 

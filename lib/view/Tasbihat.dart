@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:food/controller/tasbih_controller.dart';
-import 'package:food/view/widgets/lib/view/widgets/CustomBottomNavigationBar.dart';
+import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 
 class Tasbihat extends StatefulWidget {
   const Tasbihat({super.key});
@@ -232,7 +232,7 @@ class _TasbihatState extends State<Tasbihat> {
               ],
             ),
           ),
-          bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 1),
+          bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
         ),
       ),
     );

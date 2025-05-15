@@ -5,7 +5,7 @@ import 'package:food/controller/ThemeController.dart';
 import 'package:food/database/DatabaseHelper.dart';
 import 'package:food/view/TopicsPage.dart';
 import 'package:food/view/widgets/HomeCarousel.dart';
-import 'package:food/view/widgets/lib/view/widgets/CustomBottomNavigationBar.dart';
+import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 
 class Homepage extends StatefulWidget {

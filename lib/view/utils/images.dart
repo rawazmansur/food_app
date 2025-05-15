@@ -29,6 +29,7 @@ const String language = "${svgPath}language.svg";
 const String jabudawd = "${svgPath}jabudawd.svg";
 const String notification = "${svgPath}notification.svg";
 const String prayer = "${svgPath}prayer-beads-svgrepo-com.svg";
+const String video = "${svgPath}video-library-svgrepo-com.svg";
 
 // //assets/png/
 // const String fast = "${pngPath}fast.png";

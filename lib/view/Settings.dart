@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/FontSizeController.dart';
-import 'package:food/view/widgets/lib/view/widgets/CustomBottomNavigationBar.dart';
+import 'package:food/controller/NotificationPreferenceController.dart';
+import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -19,6 +20,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     final _themeController = Get.find<ThemeController>();
     final fontSizeController = Get.put(FontSizeController());
+    final NotificationPreferenceController _notificationController = Get.find();
 
     return Obx(
       () => Directionality(
@@ -174,9 +176,10 @@ class _SettingsState extends State<Settings> {
                           color: _themeController.textAppBar,
                         ),
                         activeColor: _themeController.iconBottonNav,
-                        value: _themeController.isDarkMode.value,
+                        value:
+                            _notificationController.isNotificationEnabled.value,
                         onChanged: (val) {
-                          _themeController.toggleTheme();
+                          _notificationController.toggleNotification(val);
                         },
                       );
                     }),
@@ -267,7 +270,7 @@ class _SettingsState extends State<Settings> {
             ),
           ),
 
-          bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 3),
+          bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4),
         ),
       ),
     );

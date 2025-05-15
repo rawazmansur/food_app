@@ -7,6 +7,7 @@ import 'package:food/view/Notfiication.dart';
 import 'package:food/view/Settings.dart';
 import 'package:food/view/Tasbihat.dart';
 import 'package:food/view/utils/images.dart';
+import 'package:food/view/videoView.dart';
 import 'package:get/get.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -67,12 +68,15 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 Get.off(() => Homepage(), transition: Transition.noTransition);
                 break;
               case 1:
-                Get.off(() => const Tasbihat(), transition: Transition.noTransition);
+                Get.off(() => const Videoview(), transition: Transition.noTransition);
                 break;
               case 2:
-                Get.off(() => Notfiication(), transition: Transition.noTransition);
+                Get.off(() => const Tasbihat(), transition: Transition.noTransition);
                 break;
               case 3:
+                Get.off(() => Notfiication(), transition: Transition.noTransition);
+                break;
+              case 4:
                 Get.off(() => const Settings(), transition: Transition.noTransition);
                 break;
               default:
@@ -96,8 +100,20 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               icon: SizedBox(
                 height: 30.sp,
                 child: SvgPicture.asset(
-                  prayer,
+                  video,
                   color: _currentIndex == 1
+                      ? themeController.iconBottonNav
+                      : themeController.textAppBar.withOpacity(0.6),
+                ),
+              ),
+              label: 'وتار',
+            ),
+            BottomNavigationBarItem(
+              icon: SizedBox(
+                height: 30.sp,
+                child: SvgPicture.asset(
+                  prayer,
+                  color: _currentIndex == 2
                       ? themeController.iconBottonNav
                       : themeController.textAppBar.withOpacity(0.6),
                 ),
@@ -109,7 +125,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 height: 30.sp,
                 child: SvgPicture.asset(
                   notification,
-                  color: _currentIndex == 2
+                  color: _currentIndex == 3
                       ? themeController.iconBottonNav
                       : themeController.textAppBar.withOpacity(0.6),
                 ),
@@ -121,7 +137,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 height: 30.sp,
                 child: SvgPicture.asset(
                   settings,
-                  color: _currentIndex == 3
+                  color: _currentIndex == 4
                       ? themeController.iconBottonNav
                       : themeController.textAppBar.withOpacity(0.6),
                 ),

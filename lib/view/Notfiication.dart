@@ -3,7 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/StoryController.dart';
 import 'package:food/controller/ThemeController.dart';
-import 'package:food/view/widgets/lib/view/widgets/CustomBottomNavigationBar.dart';
+import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -328,7 +328,7 @@ class _NotfiicationState extends State<Notfiication> {
           },
         );
       }),
-      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),
+      bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 3),
     );
   }
 }
