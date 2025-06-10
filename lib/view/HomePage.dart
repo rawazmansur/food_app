@@ -40,17 +40,7 @@ class _HomepageState extends State<Homepage> {
         child: Scaffold(
           backgroundColor: _themeController.scaffold,
           appBar: AppBar(
-            actions: [
-              IconButton(
-                onPressed: () {
-               
-                },
-                icon: Icon(
-                  Icons.info_outline,
-                  color: _themeController.textAppBar,
-                ),
-              ),
-            ],
+            
             centerTitle: true,
             title: Text(
               'بەرنامەی خۆراکی پێغەمبەر ﷺ',

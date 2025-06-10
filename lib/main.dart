@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/AudioController.dart';
 import 'package:food/controller/AudioDownloaderController.dart';
@@ -12,6 +13,7 @@ import 'package:food/controller/ThemeController.dart';
 import 'package:food/controller/tasbih_controller.dart';
 import 'package:food/firebase_options.dart';
 import 'package:food/services/NotficasionServices.dart';
+import 'package:food/view/HomePage.dart';
 import 'package:food/view/SplashScreen.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -25,6 +27,10 @@ void main() async {
   await NotificationService.init();
   tz.initializeTimeZones();
   await NotificationService.scheduleDailyNotificationsAt9AMAnd9PM();
+   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //await Future.delayed(const Duration(seconds: 3));
+  FlutterNativeSplash.remove();
 
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
@@ -71,7 +77,7 @@ class MyApp extends StatelessWidget {
 
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        home: const Homepage(),
       ),
     );
   }
