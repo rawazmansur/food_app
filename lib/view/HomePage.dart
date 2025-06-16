@@ -4,7 +4,7 @@ import 'package:food/Model/DiscussionModel.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:food/database/DatabaseHelper.dart';
 import 'package:food/view/TopicsPage.dart';
-import 'package:food/view/widgets/HomeCarousel.dart';
+
 import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 
@@ -28,19 +28,12 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> _carouselImages = [
-      'https://scontent.fbgw4-4.fna.fbcdn.net/v/t39.30808-6/495369436_988975476731457_4551646234351932460_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeH_gKadd3hKI6bkyKR5z5TVNT5-K7W0IU01Pn4rtbQhTfeCXUDs7M2HR_jTKFFU3cAnRGxMxV1bCaGNM1xWQeZn&_nc_ohc=LsoEE77FpjUQ7kNvwEu2ryp&_nc_oc=AdnPawhmPLr5vhUZsbs7305yfL0RFOq70dtZJZfABxZgZsjOcsY6hRSvXQ-DQXWkZEc&_nc_zt=23&_nc_ht=scontent.fbgw4-4.fna&_nc_gid=APHwjM1wE7YD3N4BeHXAAg&oh=00_AfIDt0Tms1fQ9ne1Bs5-fcafRPfoVUipc0VndhxToa3A9A&oe=6827D44D',
-      'https://scontent.fbgw4-4.fna.fbcdn.net/v/t39.30808-6/495369436_988975476731457_4551646234351932460_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeH_gKadd3hKI6bkyKR5z5TVNT5-K7W0IU01Pn4rtbQhTfeCXUDs7M2HR_jTKFFU3cAnRGxMxV1bCaGNM1xWQeZn&_nc_ohc=LsoEE77FpjUQ7kNvwEu2ryp&_nc_oc=AdnPawhmPLr5vhUZsbs7305yfL0RFOq70dtZJZfABxZgZsjOcsY6hRSvXQ-DQXWkZEc&_nc_zt=23&_nc_ht=scontent.fbgw4-4.fna&_nc_gid=APHwjM1wE7YD3N4BeHXAAg&oh=00_AfIDt0Tms1fQ9ne1Bs5-fcafRPfoVUipc0VndhxToa3A9A&oe=6827D44D',
-      'https://scontent.fbgw4-4.fna.fbcdn.net/v/t39.30808-6/495369436_988975476731457_4551646234351932460_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeH_gKadd3hKI6bkyKR5z5TVNT5-K7W0IU01Pn4rtbQhTfeCXUDs7M2HR_jTKFFU3cAnRGxMxV1bCaGNM1xWQeZn&_nc_ohc=LsoEE77FpjUQ7kNvwEu2ryp&_nc_oc=AdnPawhmPLr5vhUZsbs7305yfL0RFOq70dtZJZfABxZgZsjOcsY6hRSvXQ-DQXWkZEc&_nc_zt=23&_nc_ht=scontent.fbgw4-4.fna&_nc_gid=APHwjM1wE7YD3N4BeHXAAg&oh=00_AfIDt0Tms1fQ9ne1Bs5-fcafRPfoVUipc0VndhxToa3A9A&oe=6827D44D',
-    ];
-
     return Obx(
       () => Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
           backgroundColor: _themeController.scaffold,
           appBar: AppBar(
-            
             centerTitle: true,
             title: Text(
               'بەرنامەی خۆراکی پێغەمبەر ﷺ',
@@ -67,8 +60,6 @@ class _HomepageState extends State<Homepage> {
 
               return ListView(
                 children: [
-                  HomeCarousel(images: _carouselImages),
-
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
