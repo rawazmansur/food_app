@@ -112,16 +112,20 @@ class _SettingsState extends State<Settings> {
                                 fontSize: 16.sp,
                                 color: _themeController.textAppBar,
                               ),
+
                               items: [
                                 DropdownMenuItem(
+                                  alignment: Alignment.centerRight,
                                   value: 'system',
                                   child: Text('سیستەم'),
                                 ),
                                 DropdownMenuItem(
+                                  alignment: Alignment.centerRight,
                                   value: 'light',
                                   child: Text('ڕووناک'),
                                 ),
                                 DropdownMenuItem(
+                                  alignment: Alignment.centerRight,
                                   value: 'dark',
                                   child: Text('تاریک'),
                                 ),

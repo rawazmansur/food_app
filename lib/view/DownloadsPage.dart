@@ -33,7 +33,7 @@ class DownloadsPage extends StatelessWidget {
         backgroundColor: themeController.appBar,
         centerTitle: true,
         title: Text(
-          "دابەزندراوەکان",
+          "دابەزێندراوەکان",
           style: TextStyle(
             fontFamily: 'ZainPeet',
             fontSize: 20.sp,
@@ -43,11 +43,11 @@ class DownloadsPage extends StatelessWidget {
       ),
       body: Obx(() {
         if (audios.isEmpty) {
-          return const Center(
+          return  Center(
             child: Text(
               "هیچ دابەزاندنێک نەکراوە",
               textDirection: TextDirection.rtl,
-              style: TextStyle(fontFamily: 'ZainPeet'),
+              style: TextStyle(fontFamily: 'ZainPeet', fontSize: 16.sp, color: themeController.textAppBar),
             ),
           );
         }

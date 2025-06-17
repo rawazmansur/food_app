@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -28,16 +29,49 @@ class AudioDownloaderController extends GetxController {
 
   Future<void> downloadAudio(String url, String filename) async {
     try {
-      await requestManageExternalStoragePermission();
+      bool permissionGranted = await requestManageExternalStoragePermission();
 
-   final downloadsDir = Directory('/storage/emulated/0/Download/');
+      if (!permissionGranted) {
+        // Permission denied: don't start download, maybe show an error message
+        Get.snackbar(
+            '! ئاگاداری',
+            'تکایە مۆڵەتی دابەزاندنی فایلەکان بدەن',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.orange.shade700,
+          colorText: Colors.white,
+          titleText: Text(
+            '! ئاگاداری',
+            style: TextStyle(
+              fontFamily: 'zainPeet',
+              fontWeight: FontWeight.bold,
+              fontSize: 16.sp,
+              color: Colors.white,
+              
+            ),
+            textAlign: TextAlign.right,
+          ),
+          messageText: Text(
+            'تکایە مۆڵەتی دابەزاندنی فایلەکان بدەن',
+            style: TextStyle(
+              fontFamily: 'zainPeet',
+              fontSize: 16.sp,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.right,
+          ),
+          borderRadius: 8,
+          margin: EdgeInsets.all(10),
+        );
+        return; // Stop execution here
+      }
 
-    if (!await downloadsDir.exists()) {
-      await downloadsDir.create(recursive: true);
-    }
+      final downloadsDir = Directory('/storage/emulated/0/Download/');
 
-    final file = File('${downloadsDir.path}/foodapp_$filename');
+      if (!await downloadsDir.exists()) {
+        await downloadsDir.create(recursive: true);
+      }
 
+      final file = File('${downloadsDir.path}/foodapp_$filename');
 
       final request = http.Request('GET', Uri.parse(url));
       final client = http.Client();
@@ -212,24 +246,25 @@ class AudioDownloaderController extends GetxController {
       );
     }
   }
+
   Future<List<FileSystemEntity>> getMyDownloadedMP3s() async {
-  final downloadsDir = Directory('/storage/emulated/0/Download');
+    final downloadsDir = Directory('/storage/emulated/0/Download');
 
-  if (!await downloadsDir.exists()) {
-    return [];
+    if (!await downloadsDir.exists()) {
+      return [];
+    }
+
+    final files = downloadsDir.listSync();
+
+    // Filter only .mp3 files that start with "foodapp_"
+    final myFiles =
+        files.where((file) {
+          final fileName = file.path.split('/').last;
+          return file is File &&
+              fileName.endsWith('.mp3') &&
+              fileName.startsWith('foodapp_');
+        }).toList();
+
+    return myFiles;
   }
-
-  final files = downloadsDir.listSync();
-
-  // Filter only .mp3 files that start with "foodapp_"
-  final myFiles = files.where((file) {
-    final fileName = file.path.split('/').last;
-    return file is File &&
-        fileName.endsWith('.mp3') &&
-        fileName.startsWith('foodapp_');
-  }).toList();
-
-  return myFiles;
-}
-
 }
