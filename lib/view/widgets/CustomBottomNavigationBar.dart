@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:food/view/HomePage.dart';
-import 'package:food/view/Notfiication.dart';
 import 'package:food/view/Settings.dart';
 import 'package:food/view/Tasbihat.dart';
 import 'package:food/view/utils/images.dart';
@@ -68,17 +67,24 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 Get.off(() => Homepage(), transition: Transition.noTransition);
                 break;
               case 1:
-                Get.off(() => const Videoview(), transition: Transition.noTransition);
+                Get.off(
+                  () => const Videoview(),
+                  transition: Transition.noTransition,
+                );
                 break;
               case 2:
-                Get.off(() => const Tasbihat(), transition: Transition.noTransition);
+                Get.off(
+                  () => const Tasbihat(),
+                  transition: Transition.noTransition,
+                );
                 break;
               case 3:
-                Get.off(() => Notfiication(), transition: Transition.noTransition);
+                Get.off(
+                  () => const Settings(),
+                  transition: Transition.noTransition,
+                );
                 break;
-              case 4:
-                Get.off(() => const Settings(), transition: Transition.noTransition);
-                break;
+
               default:
                 break;
             }
@@ -89,9 +95,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 height: 30.sp,
                 child: SvgPicture.asset(
                   home,
-                  color: _currentIndex == 0
-                      ? themeController.iconBottonNav
-                      : themeController.textAppBar.withOpacity(0.6),
+                  color:
+                      _currentIndex == 0
+                          ? themeController.iconBottonNav
+                          : themeController.textAppBar.withOpacity(0.6),
                 ),
               ),
               label: 'ماڵەوە',
@@ -101,45 +108,37 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 height: 30.sp,
                 child: SvgPicture.asset(
                   video,
-                  color: _currentIndex == 1
-                      ? themeController.iconBottonNav
-                      : themeController.textAppBar.withOpacity(0.6),
+                  color:
+                      _currentIndex == 1
+                          ? themeController.iconBottonNav
+                          : themeController.textAppBar.withOpacity(0.6),
                 ),
               ),
-              label: 'وتار',
+              label: 'ڤیدیۆ',
             ),
             BottomNavigationBarItem(
               icon: SizedBox(
                 height: 30.sp,
                 child: SvgPicture.asset(
                   prayer,
-                  color: _currentIndex == 2
-                      ? themeController.iconBottonNav
-                      : themeController.textAppBar.withOpacity(0.6),
+                  color:
+                      _currentIndex == 2
+                          ? themeController.iconBottonNav
+                          : themeController.textAppBar.withOpacity(0.6),
                 ),
               ),
-              label: 'زیکر',
+              label: 'وتاری دەنگی',
             ),
-            BottomNavigationBarItem(
-              icon: SizedBox(
-                height: 30.sp,
-                child: SvgPicture.asset(
-                  notification,
-                  color: _currentIndex == 3
-                      ? themeController.iconBottonNav
-                      : themeController.textAppBar.withOpacity(0.6),
-                ),
-              ),
-              label: 'ئاگاداریەکان',
-            ),
+
             BottomNavigationBarItem(
               icon: SizedBox(
                 height: 30.sp,
                 child: SvgPicture.asset(
                   settings,
-                  color: _currentIndex == 4
-                      ? themeController.iconBottonNav
-                      : themeController.textAppBar.withOpacity(0.6),
+                  color:
+                      _currentIndex == 3
+                          ? themeController.iconBottonNav
+                          : themeController.textAppBar.withOpacity(0.6),
                 ),
               ),
               label: 'ڕێکخستن',

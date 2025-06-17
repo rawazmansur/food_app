@@ -369,7 +369,7 @@ class _SettingsState extends State<Settings> {
             ),
           ),
 
-          bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 4),
+          bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 3),
         ),
       ),
     );
