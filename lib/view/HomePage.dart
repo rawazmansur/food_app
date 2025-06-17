@@ -81,6 +81,8 @@ class _HomepageState extends State<Homepage> {
                                       const Color.fromARGB(255, 67, 67, 67),
                                     ]
                                     : const [
+                                      // Color.fromARGB(255, 23, 157, 101),
+                                      // Color.fromARGB(255, 52, 185, 130),
                                       Color.fromARGB(255, 166, 196, 247),
                                       Color.fromARGB(255, 116, 166, 252),
                                     ],

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food/controller/ThemeController.dart';
+import 'package:food/view/AudioPlayerPage.dart';
 import 'package:food/view/HomePage.dart';
 import 'package:food/view/Settings.dart';
 import 'package:food/view/Tasbihat.dart';
+import 'package:food/view/YoutubePage.dart';
 import 'package:food/view/utils/images.dart';
 import 'package:food/view/videoView.dart';
 import 'package:get/get.dart';
@@ -68,13 +70,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 break;
               case 1:
                 Get.off(
-                  () => const Videoview(),
+                  () => const Youtubepage(),
                   transition: Transition.noTransition,
                 );
                 break;
               case 2:
                 Get.off(
-                  () => const Tasbihat(),
+                  () =>  AudioPlayerPage(),
                   transition: Transition.noTransition,
                 );
                 break;

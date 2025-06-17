@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:food/controller/ThemeController.dart';
+import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 
 class Youtubepage extends StatefulWidget {
@@ -168,33 +169,19 @@ class _YoutubepageState extends State<Youtubepage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: themeController.scaffold,
-        appBar: AppBar(
-          backgroundColor: themeController.scaffold,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: themeController.textAppBar),
-            onPressed: () => Get.back(),
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(
-                  'کۆی وتارە ڤیدیۆەیەکان',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontFamily: 'ZainPeet',
-                    color: themeController.textAppBar,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+              backgroundColor: themeController.scaffold,
+          appBar: AppBar(
+            backgroundColor: themeController.appBar,
+            title: Text(
+              'کۆی وتارە ڤیدیۆەیەکان',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontFamily: 'ZainPeet',
+                color: themeController.textAppBar,
               ),
-            ],
+            ),
+            centerTitle: true,
           ),
-        ),
         body: Padding(
           padding: EdgeInsets.all(16.w),
           child: ListView.builder(
@@ -260,6 +247,7 @@ class _YoutubepageState extends State<Youtubepage> {
             },
           ),
         ),
+        bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 1),
       ),
     );
   }

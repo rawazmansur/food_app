@@ -88,39 +88,73 @@ class _SettingsState extends State<Settings> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'گۆڕینی ڕەنگ',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontFamily: 'ZainPeet',
-                            color: _themeController.textAppBar,
-                          ),
-                        ),
-                        Obx(() {
-                          return SwitchListTile(
-                            title: Text(
-                              _themeController.isDarkMode.value
-                                  ? 'ڕەنگی تاریک چالاکە'
-                                  : 'ڕەنگی ڕووناک چالاکە',
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'گۆڕینی ڕەنگ',
                               style: TextStyle(
-                                fontSize: 16.sp,
+                                fontSize: 18.sp,
                                 fontFamily: 'ZainPeet',
                                 color: _themeController.textAppBar,
                               ),
                             ),
-                            secondary: Icon(
-                              _themeController.isDarkMode.value
-                                  ? Icons.dark_mode
-                                  : Icons.light_mode,
-                              color: _themeController.textAppBar,
+                            DropdownButton<String>(
+                              dropdownColor: _themeController.cardColor,
+                              value:
+                                  _themeController.themeSource.value
+                                      .toLowerCase(), // make sure value is lowercase
+                              onChanged: (val) {
+                                if (val != null) _themeController.setTheme(val);
+                              },
+                              style: TextStyle(
+                                fontFamily: 'ZainPeet',
+                                fontSize: 16.sp,
+                                color: _themeController.textAppBar,
+                              ),
+                              items: [
+                                DropdownMenuItem(
+                                  value: 'system',
+                                  child: Text('سیستەم'),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'light',
+                                  child: Text('ڕووناک'),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'dark',
+                                  child: Text('تاریک'),
+                                ),
+                              ],
                             ),
-                            activeColor: _themeController.iconBottonNav,
-                            value: _themeController.isDarkMode.value,
-                            onChanged: (val) {
-                              _themeController.toggleTheme();
-                            },
-                          );
-                        }),
+                          ],
+                        ),
+
+                        // Obx(() {
+                        //   return SwitchListTile(
+                        //     title: Text(
+                        //       _themeController.isDarkMode.value
+                        //           ? 'ڕەنگی تاریک چالاکە'
+                        //           : 'ڕەنگی ڕووناک چالاکە',
+                        //       style: TextStyle(
+                        //         fontSize: 16.sp,
+                        //         fontFamily: 'ZainPeet',
+                        //         color: _themeController.textAppBar,
+                        //       ),
+                        //     ),
+                        //     secondary: Icon(
+                        //       _themeController.isDarkMode.value
+                        //           ? Icons.dark_mode
+                        //           : Icons.light_mode,
+                        //       color: _themeController.textAppBar,
+                        //     ),
+                        //     activeColor: _themeController.iconBottonNav,
+                        //     value: _themeController.isDarkMode.value,
+                        //     onChanged: (val) {
+                        //       _themeController.toggleTheme();
+                        //     },
+                        //   );
+                        // }),
                         const SizedBox(height: 10),
                         Text(
                           'گۆڕینی قەبارەی نووسین',

@@ -30,13 +30,14 @@ class AudioDownloaderController extends GetxController {
     try {
       await requestManageExternalStoragePermission();
 
-   final downloadsDir = Directory('/storage/emulated/0/Download');
+   final downloadsDir = Directory('/storage/emulated/0/Download/');
 
     if (!await downloadsDir.exists()) {
       await downloadsDir.create(recursive: true);
     }
 
-    final file = File('${downloadsDir.path}/$filename');
+    final file = File('${downloadsDir.path}/foodapp_$filename');
+
 
       final request = http.Request('GET', Uri.parse(url));
       final client = http.Client();
@@ -211,4 +212,24 @@ class AudioDownloaderController extends GetxController {
       );
     }
   }
+  Future<List<FileSystemEntity>> getMyDownloadedMP3s() async {
+  final downloadsDir = Directory('/storage/emulated/0/Download');
+
+  if (!await downloadsDir.exists()) {
+    return [];
+  }
+
+  final files = downloadsDir.listSync();
+
+  // Filter only .mp3 files that start with "foodapp_"
+  final myFiles = files.where((file) {
+    final fileName = file.path.split('/').last;
+    return file is File &&
+        fileName.endsWith('.mp3') &&
+        fileName.startsWith('foodapp_');
+  }).toList();
+
+  return myFiles;
+}
+
 }

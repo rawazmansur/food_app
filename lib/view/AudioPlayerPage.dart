@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/AudioController.dart';
 import 'package:food/controller/AudioDownloaderController.dart';
 import 'package:food/controller/ThemeController.dart';
+import 'package:food/view/DownloadsPage.dart';
+import 'package:food/view/widgets/CustomBottomNavigationBar.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
@@ -39,33 +41,27 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: themeController.scaffold,
-        appBar: AppBar(
-          backgroundColor: themeController.scaffold,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: themeController.textAppBar),
-            onPressed: () => Get.back(),
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(
-                  'کۆی وتارە دەنگیەکان',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontFamily: 'ZainPeet',
-                    color: themeController.textAppBar,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+         backgroundColor: themeController.scaffold,
+          appBar: AppBar(
+            backgroundColor: themeController.appBar,
+            leading: IconButton(
+              icon: Icon(
+                Icons.download,
+                color: themeController.textAppBar,
               ),
-            ],
+              onPressed: () =>Get.to(() => DownloadsPage()),
+
+            ),
+            title: Text(
+              'کۆی وتارە دەنگیەکان',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontFamily: 'ZainPeet',
+                color: themeController.textAppBar,
+              ),
+            ),
+            centerTitle: true,
           ),
-        ),
         body: GetBuilder<AudioRawazController>(
           builder: (controller) {
             if (controller.audioList.isEmpty) {
@@ -250,16 +246,13 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                             MainAxisAlignment.center,
                                         children: [
                                           IconButton(
-                                            icon: Icon(
-                                              Icons.skip_previous_rounded,
-                                            ),
+                                            icon: Icon(Icons.skip_next_rounded),
                                             iconSize: 40.sp,
                                             color:
                                                 themeController.iconBottonNav,
                                             onPressed:
                                                 () =>
-                                                    audioController
-                                                        .playPrevious(),
+                                                    audioController.playNext(),
                                           ),
                                           SizedBox(width: 20.w),
                                           IconButton(
@@ -275,16 +268,19 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                                   false;
                                             },
                                           ),
-                                          SizedBox(width: 20.w),
-                                          IconButton(
-                                            icon: Icon(Icons.skip_next_rounded),
+                                          SizedBox(width: 20.w),  IconButton(
+                                            icon: Icon(
+                                              Icons.skip_previous_rounded,
+                                            ),
                                             iconSize: 40.sp,
                                             color:
                                                 themeController.iconBottonNav,
                                             onPressed:
                                                 () =>
-                                                    audioController.playNext(),
+                                                    audioController
+                                                        .playPrevious(),
                                           ),
+                                         
                                         ],
                                       ),
                                     ],
@@ -383,6 +379,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             );
           },
         ),
+        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
       ),
     );
   }
