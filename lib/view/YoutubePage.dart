@@ -191,7 +191,7 @@ class _YoutubepageState extends State<Youtubepage> {
               String title = cleanTitle(youtubeVideos[index]['title']!);
 
               const String backgroundImage =
-                  'https://www.shutterstock.com/image-photo/ramadan-iftar-eid-muslim-family-260nw-2134403149.jpg';
+                  'https://www.shutterstock.com/shutterstock/videos/1089168093/thumb/7.jpg?ip=x480';
 
               return GestureDetector(
                 onTap: () => launchURL(url),

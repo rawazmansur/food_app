@@ -54,7 +54,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     final _themeController = Get.find<ThemeController>();
     final fontSizeController = Get.put(FontSizeController());
-    final NotificationPreferenceController _notificationController = Get.find();
+    // final NotificationPreferenceController _notificationController = Get.find();
 
     return Obx(
       () => Directionality(
@@ -101,9 +101,8 @@ class _SettingsState extends State<Settings> {
                             ),
                             DropdownButton<String>(
                               dropdownColor: _themeController.cardColor,
-                              value:
-                                  _themeController.themeSource.value
-                                      .toLowerCase(), // make sure value is lowercase
+                              value: _themeController.themeSource.value
+                                  .toLowerCase(), // make sure value is lowercase
                               onChanged: (val) {
                                 if (val != null) _themeController.setTheme(val);
                               },
@@ -207,10 +206,8 @@ class _SettingsState extends State<Settings> {
                                 child: Text(
                                   'بەرنامەی خۆراکی پێغەمبەر ﷺ',
                                   style: TextStyle(
-                                    fontSize:
-                                        fontSizeController
-                                            .kurdishFontSize
-                                            .value,
+                                    fontSize: fontSizeController
+                                        .kurdishFontSize.value,
                                     fontFamily: 'ZainPeet',
                                     color: _themeController.textAppBar,
                                     height: 1.8,
@@ -277,7 +274,6 @@ class _SettingsState extends State<Settings> {
                         ),
                         ListTile(
                           trailing: Icon(Icons.arrow_forward_ios),
-
                           leading: Image.asset(
                             youtube,
                             width: 30.sp,
@@ -307,31 +303,6 @@ class _SettingsState extends State<Settings> {
                     ),
                     child: Column(
                       children: [
-                        ListTile(
-                          leading: Icon(
-                            Icons.feedback,
-                            color: _themeController.textAppBar,
-                          ),
-                          title: Text(
-                            'پێشنیار',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontFamily: 'ZainPeet',
-                              color: _themeController.textAppBar,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SuggestionPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        Divider(
-                          color: _themeController.textAppBar.withOpacity(0.2),
-                        ),
                         ListTile(
                           leading: Icon(
                             Icons.share,
@@ -367,7 +338,6 @@ class _SettingsState extends State<Settings> {
                               color: _themeController.textAppBar,
                             ),
                           ),
-
                           onTap: () {
                             Get.defaultDialog(
                               title: "دەربارە",
@@ -406,7 +376,6 @@ class _SettingsState extends State<Settings> {
               ),
             ),
           ),
-
           bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 3),
         ),
       ),

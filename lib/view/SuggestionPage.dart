@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food/controller/ThemeController.dart';
 import 'package:get/get.dart';
@@ -13,45 +12,45 @@ class _SuggestionPageState extends State<SuggestionPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _suggestionController = TextEditingController();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final ThemeController themeController = Get.find();
 
-  void _submitSuggestion() async {
-    String name = _nameController.text.trim();
-    String suggestion = _suggestionController.text.trim();
+  // void _submitSuggestion() async {
+  //   String name = _nameController.text.trim();
+  //   String suggestion = _suggestionController.text.trim();
 
-    if (name.isEmpty || suggestion.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'تکایە ناو و پێشنیارەکەت پڕبکەوە',
-            style: TextStyle(fontFamily: 'ZainPeet'),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+  //   if (name.isEmpty || suggestion.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(
+  //           'تکایە ناو و پێشنیارەکەت پڕبکەوە',
+  //           style: TextStyle(fontFamily: 'ZainPeet'),
+  //         ),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //     return;
+  //   }
 
-    await _firestore.collection('suggestions').add({
-      'name': name,
-      'suggestion': suggestion,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
+  //   await _firestore.collection('suggestions').add({
+  //     'name': name,
+  //     'suggestion': suggestion,
+  //     'timestamp': FieldValue.serverTimestamp(),
+  //   });
 
-    _nameController.clear();
-    _suggestionController.clear();
+  //   _nameController.clear();
+  //   _suggestionController.clear();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'سوپاس بۆ پێشنیارەکەت ئێمە بەرزدەینرخێنین!',
-          style: TextStyle(fontFamily: 'ZainPeet'),
-        ),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(
+  //         'سوپاس بۆ پێشنیارەکەت ئێمە بەرزدەینرخێنین!',
+  //         style: TextStyle(fontFamily: 'ZainPeet'),
+  //       ),
+  //       backgroundColor: Colors.green,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +131,9 @@ class _SuggestionPageState extends State<SuggestionPage> {
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
-                  onPressed: _submitSuggestion,
+                  onPressed: () {
+                    //   _submitSuggestion
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: themeController.iconBottonNav,
                     shape: RoundedRectangleBorder(

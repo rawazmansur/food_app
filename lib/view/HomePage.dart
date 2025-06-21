@@ -142,7 +142,7 @@ class _HomepageState extends State<Homepage> {
               );
             },
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 0),
+          bottomNavigationBar: CustomBottomNavigationBar(currentIndex: 2),
         ),
       ),
     );

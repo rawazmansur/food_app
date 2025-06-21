@@ -12,7 +12,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  ThemeController themeController = Get.put(ThemeController());
+  final ThemeController themeController = Get.put(ThemeController());
+
   @override
   void initState() {
     super.initState();
@@ -30,17 +31,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = themeController.isDarkMode.value;
+
     return Scaffold(
+      backgroundColor: isDark? const Color(0xFF323232) : Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'بەرنامەی خۆراکی پێغەمبەر ﷺ',
-              style: TextStyle(fontSize: 30.sp, fontFamily: 'ZainPeet'),
-            ),
-          ],
+        child: Image.asset(
+          isDark
+              ? 'assets/icon/icon-dark.png'
+              : 'assets/icon/icon-light.png',
+          width: 250.w,
+          height: 250.w,
+          fit: BoxFit.contain,
         ),
       ),
     );

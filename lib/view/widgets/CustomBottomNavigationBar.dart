@@ -66,7 +66,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             });
             switch (index) {
               case 0:
-                Get.off(() => Homepage(), transition: Transition.noTransition);
+                Get.off(
+                  () => AudioPlayerPage(),
+                  transition: Transition.noTransition,
+                );
                 break;
               case 1:
                 Get.off(
@@ -75,10 +78,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 );
                 break;
               case 2:
-                Get.off(
-                  () =>  AudioPlayerPage(),
-                  transition: Transition.noTransition,
-                );
+                Get.off(() => Homepage(), transition: Transition.noTransition);
                 break;
               case 3:
                 Get.off(
@@ -96,14 +96,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               icon: SizedBox(
                 height: 30.sp,
                 child: SvgPicture.asset(
-                  home,
+                  audio,
                   color:
                       _currentIndex == 0
                           ? themeController.iconBottonNav
                           : themeController.textAppBar.withOpacity(0.6),
                 ),
               ),
-              label: 'ماڵەوە',
+              label: 'وتاری دەنگی',
             ),
             BottomNavigationBarItem(
               icon: SizedBox(
@@ -118,20 +118,20 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               ),
               label: 'ڤیدیۆ',
             ),
+
             BottomNavigationBarItem(
               icon: SizedBox(
                 height: 30.sp,
                 child: SvgPicture.asset(
-                  prayer,
+                  write,
                   color:
                       _currentIndex == 2
                           ? themeController.iconBottonNav
                           : themeController.textAppBar.withOpacity(0.6),
                 ),
               ),
-              label: 'وتاری دەنگی',
+              label: 'نووسین',
             ),
-
             BottomNavigationBarItem(
               icon: SizedBox(
                 height: 30.sp,

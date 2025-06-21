@@ -379,7 +379,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             );
           },
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
+        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 0),
       ),
     );
   }
