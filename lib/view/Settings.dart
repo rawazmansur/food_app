@@ -316,10 +316,18 @@ class _SettingsState extends State<Settings> {
                               color: _themeController.textAppBar,
                             ),
                           ),
-                          onTap: () {
-                            Share.share(
-                              'https://play.google.com/store/apps/details?id=com.fyxtech.muslim&pcampaignid=web_share',
-                            );
+                          onTap: () async {
+                            const androidPackageName =
+                                'com.rawaz.foodprophet';
+                            final appStoreLink =
+                                'https://play.google.com/store/apps/details?id=$androidPackageName';
+                            final shareMessage =
+                                'Check out this amazing app: $appStoreLink';
+                            try {
+                              await Share.share(shareMessage);
+                            } catch (e) {
+                              print('Error sharing app: $e');
+                            }
                           },
                         ),
                         Divider(
